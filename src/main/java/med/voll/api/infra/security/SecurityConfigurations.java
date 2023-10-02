@@ -24,16 +24,15 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Le indicamos a Sprint el tipo de sesion
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Le indicamos a Spring el tipo de sesion
                 .and().authorizeRequests()
-                .requestMatchers(HttpMethod.POST, "/login")
-                .permitAll()
+                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**","/swagger-ui/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
@@ -43,7 +42,8 @@ public class SecurityConfigurations {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
